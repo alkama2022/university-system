@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List | Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+            <!-- Link CSS -->
+    <link rel="stylesheet" href="{% static 'css/student_lists.css' %}">
+</head>
+<body>
+
+<header class="academic-header">
+    <div class="header-inner">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>EduSphere</h1>
+                <p>Academic Excellence</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="page-header">
+            <h2 class="page-title">
+                <i class="fas fa-users" style="color: var(--green-fresh); margin-right: 10px;"></i>
+                Student List
+            </h2>
+            <div class="student-count">
+                <i class="fas fa-user-graduate"></i> 
+                {% with student_count=students|length %}
+                    {{ student_count }} Students
+                {% endwith %}
+            </div>
+        </div>
+
+        <div class="student-list">
+            {% for student in students %}
+                <div class="student-card">
+                    <!-- Student Image -->
+                    <div class="student-image">
+                        <img src="{{student.image.url}}" alt="{{ student.first_name }} profile image">
+                    </div>
+
+                    <!-- Student Info -->
+                    <div class="student-info">
+                        <h3>
+                            {{ student.first_name }} {{ student.last_name }}
+                        </h3>
+
+                        <p>
+                            <i class="fas fa-chart-line"></i> Level: {{ student.level }}00
+                        </p>
+
+                        <!-- Details Link -->
+                        <a href="{% url 'student_app:details' student.id %}" class="btn">
+                            See More <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <i class="fas fa-book-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem; display: block;"></i>
+                    <p>No students available at the moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+<div class="pagination-container">
+
+    <!-- Pagination Navigation -->
+    <nav aria-label="Student pagination">
+        <ul class="pagination">
+
+            {% if students.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="First page"
+                       href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        « First
+                    </a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" aria-label="Previous page"
+                       href="?page={{ students.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        ‹ Prev
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">« First</span></li>
+                <li class="page-item disabled"><span class="page-link">‹ Prev</span></li>
+            {% endif %}
+
+            <!-- Current Page -->
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ students.number }} of {{ students.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if students.has_next %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next page"
+                       href="?page={{ students.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        Next ›
+                    </a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" aria-label="Last page"
+                       href="?page={{ students.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                        Last »
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Next ›</span></li>
+                <li class="page-item disabled"><span class="page-link">Last »</span></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+    <!-- Jump to Page -->
+    <div class="pagination-jump">
+        <label for="jump-to-page">Jump to page:</label>
+        <input type="number"
+               id="jump-to-page"
+               min="1"
+               max="{{ students.paginator.num_pages }}"
+               placeholder="{{ students.number }}">
+        <button onclick="goToPage()">Go</button>
+    </div>
+
+    <!-- Info -->
+    <div class="pagination-info">
+        Showing page <strong>{{ students.number }}</strong> of 
+        <strong>{{ students.paginator.num_pages }}</strong> |
+        Total records: <strong>{{ students.paginator.count }}</strong>
+    </div>
+
+</div>
+
+<footer class="footer">
+    <p><i class="far fa-copyright"></i> 2025 EduSphere — Inspiring minds, shaping futures</p>
+</footer>
+
+
+<script>
+function goToPage() {
+    const input = document.getElementById('jump-to-page');
+    const page = parseInt(input.value);
+
+    if (!page) return;
+
+    const max = {{ students.paginator.num_pages }};
+    if (page < 1 || page > max) {
+        alert("Invalid page number");
+        return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', page);
+    window.location.search = params.toString();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSphere | Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== COLOR SYSTEM ========== */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 12px 28px rgba(0, 32, 64, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== HEADER STYLES ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Logo Section */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+            transition: var(--transition);
+        }
+
+        .logo:hover .logo-icon {
+            background: rgba(46, 154, 110, 0.35);
+            transform: rotate(5deg);
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            color: #b8d4f0;
+            font-size: 0.7rem;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 40px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 154, 110, 0.3);
+        }
+
+        .nav-link:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Active link state */
+        .nav-link.active {
+            background: var(--green-fresh);
+            box-shadow: 0 2px 8px rgba(46, 154, 110, 0.2);
+        }
+
+        /* User Info / Avatar */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.8rem 0.3rem 0.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .user-info:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--green-fresh);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Logout button style */
+        .logout-link {
+            background: rgba(220, 38, 38, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .logout-link:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* Login button style */
+        .login-link {
+            background: var(--green-fresh);
+        }
+
+        .login-link:hover {
+            background: var(--teal-mid);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile menu toggle (hamburger) */
+        .menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background: var(--green-fresh);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            width: 100%;
+        }
+
+        /* ========== FOOTER ========== */
+        .academic-footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1rem 0 0.5rem 0;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-link {
+                justify-content: center;
+            }
+
+            .user-info {
+                justify-content: center;
+                width: fit-content;
+                margin: 0 auto;
+            }
+
+            .header-container {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Animation for mobile menu */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-menu.active {
+            animation: slideDown 0.3s ease;
+        }
+
+        /* Content fade-in */
+        .main-content {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== HEADER WITH NAVIGATION ========== -->
+<header class="academic-header">
+    <div class="header-container">
+        
+        <!-- Logo / Brand -->
+        <a href="{% url 'student_app:home' %}" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="logo-text">
+                <h1>EduSphere</h1>
+                <p>Academic Excellence</p>
+            </div>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Navigation Links -->
+        <nav class="nav-menu" id="navMenu">
+            <!-- Home Link -->
+            <a href="{% url 'student_app:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <i class="fas fa-home"></i> Home
+            </a>
+
+            <!-- Conditional Authentication Links -->
+            {% if user.is_authenticated %}
+                <!-- When user IS logged in - Show Dashboard and Logout -->
+                <a href="{% url 'student_app:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                
+                {% comment %} <a href="{% url 'student_app:student_lists' %}" class="nav-link {% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+                    <i class="fas fa-users"></i> Students
+                </a> {% endcomment %}
+
+                <a href="{% url 'student_app:courses' %}" class="nav-link {% if request.resolver_match.url_name == 'courses' %}active{% endif %}">
+                    <i class="fas fa-book"></i> Courses
+                </a>
+
+                <!-- User Info with Avatar -->
+                <div class="user-info">
+                    <div class="user-avatar">
+                        {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1"|default:"U" }}
+                    </div>
+                    <span class="user-name">{{ user.username }}</span>
+                </div>
+
+                {% comment %} <!-- Logout Button -->
+                <a href="{% url 'student_app:logout' %}" class="nav-link logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a> {% endcomment %}
+            {% else %}
+                <!-- When user is NOT logged in - Show Login -->
+                <a href="{% url 'student_app:login' %}" class="nav-link login-link">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                
+                <!-- Optional Register Link -->
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            {% endif %}
+        </nav>
+        
+    </div>
+</header>
+
+<!-- ========== MAIN CONTENT BLOCK ========== -->
+<main class="main-content">
+    {% block content %}
+        <!-- Child templates will insert content here -->
+    {% endblock content %}
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="academic-footer">
+    <p>
+        <i class="far fa-copyright"></i> 2025 EduSphere — 
+        <i class="fas fa-chalkboard-user"></i> Empowering Education |
+        <i class="fas fa-shield-alt"></i> Secure Portal
+    </p>
+    
+</footer>
+
+<!-- ========== JAVASCRIPT FOR MOBILE MENU ========== -->
+<script>
+    // Mobile menu toggle functionality
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            
+            // Change icon based on menu state
+            const icon = menuToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when clicking on a link (for mobile UX)
+        const navLinks = navMenu.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+    }
+
+    // Close mobile menu when window resizes above breakpoint
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navMenu) {
+            navMenu.classList.remove('active');
+            if (menuToggle) {
+                const icon = menuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+    });
+
+    // Add active class to current page link (Django already handles with template logic)
+    // This is a fallback for client-side highlighting
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUrl = window.location.pathname;
+        const links = document.querySelectorAll('.nav-link');
+        
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href !== '#' && currentUrl.includes(href)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Registration | EduSphere</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== COLOR SYSTEM ==========
+           Primary: Deep Blue (#0A3E6D) - trust, authority
+           Secondary: Teal (#2C7A6E) - calm, growth  
+           Accent: Fresh Green (#2E9A6E) - success, action
+        */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 12px 28px rgba(0, 32, 64, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo p {
+            color: #b8d4f0;
+            font-size: 0.8rem;
+        }
+
+        /* ========== BACK BUTTON ========== */
+        .back-nav {
+            margin-bottom: 1.5rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 2px solid var(--teal-mid);
+            color: var(--teal-mid);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--teal-mid);
+            color: white;
+            transform: translateX(-4px);
+        }
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: var(--white-card);
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Header */
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(46, 154, 110, 0.2);
+        }
+
+        .form-header i {
+            font-size: 2rem;
+            color: var(--green-fresh);
+        }
+
+        .form-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        /* Course List */
+        .course-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-item {
+            background: var(--gray-bg);
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .course-item:hover {
+            background: var(--green-light);
+            transform: translateX(5px);
+            border-color: var(--green-fresh);
+        }
+
+        /* Custom Checkbox Styling */
+        .course-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--green-fresh);
+        }
+
+        .course-info {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-code {
+            font-weight: 700;
+            color: var(--blue-deep);
+            background: rgba(10, 62, 109, 0.08);
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .course-title {
+            font-weight: 500;
+            color: #2c3f4f;
+            flex: 1;
+        }
+
+        .course-unit {
+            background: var(--teal-mid);
+            color: white;
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Select All Section */
+        .select-all-container {
+            background: var(--green-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+            border: 1px solid rgba(46, 154, 110, 0.3);
+        }
+
+        .select-all-container label {
+            font-weight: 600;
+            color: var(--blue-deep);
+            cursor: pointer;
+        }
+
+        .select-all-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--green-fresh);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-soft), var(--teal-mid));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 154, 110, 0.3);
+        }
+
+        .submit-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Selected Counter */
+        .selected-counter {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--teal-mid);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-card {
+                padding: 1.2rem;
+            }
+            
+            .course-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .course-item {
+                flex-wrap: wrap;
+            }
+            
+            .form-header h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="academic-header">
+    <div class="header-inner">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>EduSphere</h1>
+                <p>Course Registration</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        
+        <!-- Back Navigation (optional - link to student dashboard) -->
+        <div class="back-nav">
+            <a href="{% url 'student_app:list' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Registration Form Card -->
+        <div class="form-card">
+            
+            <form method="POST" id="registrationForm">
+                {% csrf_token %}
+                
+                <!-- Form Header -->
+                <div class="form-header">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Select Courses to Register</h3>
+                </div>
+
+                <!-- Course List -->
+                <ul class="course-list">
+                    {% for course in courses %}
+                        <li class="course-item" onclick="toggleCheckbox(this, {{ course.id }})">
+                            <input type="checkbox" 
+                                   name="courses" 
+                                   value="{{ course.id }}" 
+                                   id="course_{{ course.id }}"
+                                   class="course-checkbox"
+                                   onchange="updateCounter()">
+                            <div class="course-info">
+                                <span class="course-code">{{ course.code }}</span>
+                                <span class="course-title">{{ course.title }}</span>
+                                <span class="course-unit">{{ course.unit }} units</span>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <div style="text-align: center; padding: 2rem; color: #7a8e9e;">
+                            <i class="fas fa-info-circle"></i> No courses available for registration.
+                        </div>
+                    {% endfor %}
+                </ul>
+
+                <!-- Select All Section -->
+                <div class="select-all-container">
+                    <input type="checkbox" 
+                           id="selectAllCheckbox" 
+                           class="select-all-checkbox"
+                           onclick="toggleAll(this)">
+                    <label for="selectAllCheckbox">
+                        <i class="fas fa-check-double"></i> Select All Courses
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Register Selected Courses
+                </button>
+
+                <!-- Selected Counter (dynamic) -->
+                <div class="selected-counter" id="selectedCounter">
+                    <i class="fas fa-check-circle"></i> No courses selected
+                </div>
+                
+            </form>
+        </div>
+        
+    </div>
+</main>
+
+<footer class="footer">
+    <p><i class="far fa-copyright"></i> 2025 EduSphere — Inspiring minds, shaping futures</p>
+</footer>
+
+<script>
+    // Function to toggle all checkboxes
+    function toggleAll(source) {
+        let checkboxes = document.getElementsByName('courses');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+        updateCounter();
+    }
+    
+    // Function to update the selected courses counter
+    function updateCounter() {
+        let checkboxes = document.getElementsByName('courses');
+        let selectedCount = 0;
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedCount++;
+            }
+        }
+        
+        let counterDiv = document.getElementById('selectedCounter');
+        let selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        
+        if (selectedCount === 0) {
+            counterDiv.innerHTML = '<i class="fas fa-info-circle"></i> No courses selected';
+            counterDiv.style.color = '#7a8e9e';
+        } else {
+            counterDiv.innerHTML = '<i class="fas fa-check-circle"></i> ' + selectedCount + ' course(s) selected for registration';
+            counterDiv.style.color = 'var(--green-fresh)';
+        }
+        
+        // Update Select All checkbox state
+        if (selectAllCheckbox) {
+            if (selectedCount === checkboxes.length && checkboxes.length > 0) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (selectedCount > 0 && selectedCount < checkboxes.length) {
+                selectAllCheckbox.indeterminate = true;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            }
+        }
+    }
+    
+    // Toggle checkbox when clicking on the whole course item
+    function toggleCheckbox(element, courseId) {
+        // Prevent triggering when clicking on the checkbox itself (to avoid double toggle)
+        if (event.target.type !== 'checkbox') {
+            let checkbox = document.getElementById('course_' + courseId);
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateCounter();
+            }
+        }
+    }
+    
+    // Initialize counter on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCounter();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | EduSphere Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========== COLOR SYSTEM ==========
+           Primary: Deep Blue (#0A3E6D) - trust, authority
+           Secondary: Teal (#2C7A6E) - calm, growth  
+           Accent: Fresh Green (#2E9A6E) - success, action
+        */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --error-red: #dc2626;
+            --error-bg: #fee2e2;
+            --success-green: #059669;
+            --success-bg: #d1fae5;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 20px 35px -10px rgba(0, 32, 64, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--green-fresh);
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .logo p {
+            color: #b8d4f0;
+            font-size: 0.8rem;
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== LOGIN CARD ========== */
+        .login-card {
+            max-width: 450px;
+            width: 100%;
+            background: var(--white-card);
+            border-radius: 32px;
+            padding: 2.2rem;
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Login Header */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header i {
+            font-size: 3rem;
+            color: var(--green-fresh);
+            background: var(--green-light);
+            padding: 1rem;
+            border-radius: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: 0.3rem;
+        }
+
+        .login-header p {
+            color: #6b7c8f;
+            font-size: 0.9rem;
+        }
+
+        /* ========== MESSAGES (Django Messages) ========== */
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+
+        .message {
+            padding: 0.9rem 1rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message i {
+            font-size: 1.1rem;
+        }
+
+        .message.error {
+            background: var(--error-bg);
+            color: var(--error-red);
+            border-left: 4px solid var(--error-red);
+        }
+
+        .message.success {
+            background: var(--success-bg);
+            color: var(--success-green);
+            border-left: 4px solid var(--success-green);
+        }
+
+        .message.warning {
+            background: #fef3c7;
+            color: #d97706;
+            border-left: 4px solid #d97706;
+        }
+
+        .message.info {
+            background: #e0f2fe;
+            color: #0284c7;
+            border-left: 4px solid #0284c7;
+        }
+
+        /* ========== FORM STYLES ========== */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            color: #94a3b8;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 60px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            background: var(--gray-bg);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--green-fresh);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(46, 154, 110, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #a0b3c4;
+        }
+
+        /* Submit Button */
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--blue-soft), var(--teal-mid));
+            color: white;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 154, 110, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Help Text */
+        .help-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            color: #7a8e9e;
+        }
+
+        .help-text a {
+            color: var(--green-fresh);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Demo Credentials Hint (optional) */
+        .demo-hint {
+            background: var(--green-light);
+            padding: 0.8rem;
+            border-radius: 16px;
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
+            color: var(--teal-mid);
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.2rem;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .form-control {
+                padding: 0.8rem 1rem 0.8rem 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="academic-header">
+    <div class="header-inner">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>EduSphere</h1>
+                <p>Academic Portal Login</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<main class="container">
+    <div class="login-card">
+        
+        <!-- Login Header -->
+        <div class="login-header">
+            <i class="fas fa-user-graduate"></i>
+            <h2>Welcome Back</h2>
+            <p>Sign in to access your academic dashboard</p>
+        </div>
+
+        <!-- Django Messages -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {% if message.tags == 'error' %}
+                            <i class="fas fa-exclamation-circle"></i>
+                        {% elif message.tags == 'success' %}
+                            <i class="fas fa-check-circle"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Username Field -->
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" 
+                           name="username" 
+                           class="form-control" 
+                           placeholder="Username (e.g., aul001)"
+                           autocomplete="username"
+                           required>
+                </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" 
+                           name="email" 
+                           class="form-control" 
+                           placeholder="Email address"
+                           autocomplete="email"
+                           required>
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" 
+                           name="password" 
+                           class="form-control" 
+                           placeholder="Password"
+                           autocomplete="current-password"
+                           required>
+                </div>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login to Portal
+            </button>
+
+            <!-- Help Text -->
+            <div class="help-text">
+                <i class="fas fa-question-circle"></i> Need help? 
+                <a href="#">Contact IT Support</a>
+            </div>
+
+            <!-- Demo Hint (Optional - remove in production) -->
+            <div class="demo-hint">
+                <i class="fas fa-info-circle"></i> Demo: Use your university credentials
+            </div>
+        </form>
+        
+    </div>
+</main>
+
+<footer class="footer">
+    <p><i class="far fa-copyright"></i> 2025 EduSphere — Secure Academic Portal</p>
+</footer>
+
+<script>
+    // Optional: Add password visibility toggle if needed
+    // This is a nice UX enhancement - can be enabled if desired
+    
+    // Auto-focus on username field when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const usernameField = document.querySelector('input[name="username"]');
+        if (usernameField) {
+            usernameField.focus();
+        }
+        
+        // Auto-dismiss messages after 5 seconds (optional)
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(message => {
+            setTimeout(() => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(-10px)';
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.style.display = 'none';
+                    }
+                }, 300);
+            }, 5000);
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .logout-container {
+        max-width: 500px;
+        margin: 2rem auto;
+    }
+    .logout-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+    }
+    .warning-icon {
+        width: 70px;
+        height: 70px;
+        background: #fee2e2;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem auto;
+    }
+    .warning-icon i {
+        font-size: 2rem;
+        color: #dc2626;
+    }
+    .btn-logout {
+        background: #dc2626;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 40px;
+        margin-right: 1rem;
+        cursor: pointer;
+    }
+    .btn-cancel {
+        background: transparent;
+        border: 2px solid var(--teal-mid);
+        color: var(--teal-mid);
+        padding: 0.7rem 1.5rem;
+        border-radius: 40px;
+        text-decoration: none;
+    }
+</style>
+
+<div class="logout-container">
+    <div class="logout-card">
+        <div class="warning-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <h2>Logout</h2>
+        <p>Are you sure you want to logout?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">Yes, Logout</button>
+            <a href="{% url 'student_app:home' %}" class="btn-cancel">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

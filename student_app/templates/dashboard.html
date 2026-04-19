@@ -1,0 +1,504 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<style>
+    /* ========== DASHBOARD SPECIFIC STYLES ========== */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Welcome Banner */
+    .welcome-banner {
+        background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-soft) 100%);
+        border-radius: 28px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        animation: slideIn 0.5s ease;
+    }
+
+    .welcome-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: rgba(46, 154, 110, 0.1);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .welcome-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 250px;
+        height: 250px;
+        background: rgba(46, 154, 110, 0.08);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .welcome-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-banner h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .welcome-banner h2 i {
+        color: var(--green-fresh);
+        font-size: 2rem;
+    }
+
+    .welcome-banner p {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+    }
+
+    .student-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.4rem 1rem;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--white-card);
+        border-radius: 24px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        animation: fadeInUp 0.5s ease backwards;
+        border: 1px solid rgba(46, 154, 110, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--green-fresh);
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+
+    .stat-icon {
+        width: 55px;
+        height: 55px;
+        background: var(--green-light);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .stat-icon i {
+        font-size: 1.8rem;
+        color: var(--green-fresh);
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        color: #6b7c8f;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--blue-deep);
+        margin-bottom: 0.2rem;
+    }
+
+    .stat-unit {
+        font-size: 0.8rem;
+        color: var(--teal-mid);
+    }
+
+    /* Action Cards */
+    .actions-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--blue-deep);
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid var(--green-fresh);
+        display: inline-block;
+    }
+
+    .section-title i {
+        color: var(--green-fresh);
+        font-size: 1.3rem;
+    }
+
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .action-card {
+        background: var(--white-card);
+        border-radius: 24px;
+        padding: 1.8rem;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid rgba(46, 154, 110, 0.1);
+        animation: fadeInUp 0.5s ease backwards;
+    }
+
+    .action-card:nth-child(1) { animation-delay: 0.2s; }
+    .action-card:nth-child(2) { animation-delay: 0.25s; }
+
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--green-fresh);
+    }
+
+    .action-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--green-light), #d4f5e3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+    }
+
+    .action-card:hover .action-icon {
+        transform: scale(1.05);
+        background: linear-gradient(135deg, var(--green-fresh), var(--teal-mid));
+    }
+
+    .action-card:hover .action-icon i {
+        color: white;
+    }
+
+    .action-icon i {
+        font-size: 2.2rem;
+        color: var(--green-fresh);
+        transition: var(--transition);
+    }
+
+    .action-card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--blue-deep);
+    }
+
+    .action-card p {
+        font-size: 0.85rem;
+        color: #6b7c8f;
+    }
+
+    .action-arrow {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--green-fresh);
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: var(--transition);
+    }
+
+    .action-card:hover .action-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Logout Button Specific */
+    .logout-card {
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    .logout-card .action-icon {
+        background: #fee2e2;
+    }
+
+    .logout-card .action-icon i {
+        color: #dc2626;
+    }
+
+    .logout-card:hover {
+        border-color: #dc2626;
+    }
+
+    .logout-card:hover .action-icon {
+        background: #dc2626;
+    }
+
+    .logout-card:hover .action-icon i {
+        color: white;
+    }
+
+    /* Recent Activity Section (Optional) */
+    .recent-section {
+        background: var(--white-card);
+        border-radius: 24px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        margin-top: 1rem;
+        animation: fadeInUp 0.5s ease 0.3s backwards;
+    }
+
+    .recent-section h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--blue-deep);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .activity-list {
+        list-style: none;
+    }
+
+    .activity-item {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #4a5c6e;
+        font-size: 0.9rem;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-item i {
+        color: var(--green-fresh);
+        width: 24px;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .welcome-banner h2 {
+            font-size: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .welcome-banner {
+            padding: 1.5rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    
+     <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <div class="welcome-content">
+            <h2>
+                <i class="fas fa-graduation-cap"></i>
+                Welcome, {{ student.user.username }}!
+            </h2>
+            <p>We're glad to have you back. Here's your academic overview.</p>
+            <div class="student-badge">
+                <i class="fas fa-id-card"></i>
+                Student ID: {{ student.user.username|upper }}
+            </div>
+        </div>
+    </div> 
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <div class="stat-label">Department</div>
+            <div class="stat-value">{{ student.department }}</div>
+            <div class="stat-unit">Faculty of Excellence</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-layer-group"></i>
+            </div>
+            <div class="stat-label">Current Level</div>
+            <div class="stat-value">{{ student.level }}00</div>
+            <div class="stat-unit">Academic Progress</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-label">Session</div>
+            <div class="stat-value">{{ student.session|default:"2024/2025" }}</div>
+            <div class="stat-unit">Active Semester</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="actions-section">
+        <h2 class="section-title">
+            <i class="fas fa-bolt"></i> Quick Actions
+        </h2>
+     
+        <div class="action-grid">
+            <!-- Register Courses Card -->
+            <a href="{% url 'student_app:enrollement' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Register Courses</h3>
+                <p>Enroll in your preferred courses for the current semester</p>
+                <div class="action-arrow">
+                    <i class="fas fa-arrow-right"></i> Get Started
+                </div>
+            </a>
+
+            <!-- Logout Card -->
+            <a href="{% url 'student_app:logout_view' %}" class="action-card logout-card">
+                <div class="action-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3>Logout</h3>
+                <p>Securely exit your academic portal</p>
+                <div class="action-arrow">
+                    <i class="fas fa-arrow-right"></i> Sign Out
+                </div>
+            </a>
+
+                        <!-- Courses TimeTable Card -->
+            <a href="{% url 'management_app:show_tible' %}" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Time Table</h3>
+                <p>See Your Table Here In Order to Now The Exact Day to Start</p>
+                <div class="action-arrow">
+                    <i class="fas fa-arrow-right"></i> Get Started
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Recent Activity / Quick Info -->
+    <div class="recent-section">
+        <h3>
+            <i class="fas fa-clock"></i> Academic Snapshot
+        </h3>
+        <ul class="activity-list">
+            <li class="activity-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Enrollment period: Open until March 30, 2025</span>
+            </li>
+            <li class="activity-item">
+                <i class="fas fa-chalkboard"></i>
+                <span>Total courses available: {{ total_courses|default:"12" }}</span>
+            </li>
+            <li class="activity-item">
+                <i class="fas fa-tasks"></i>
+                <span>Completed registrations: {{ completed_registrations|default:"0" }}</span>
+            </li>
+            <li class="activity-item">
+                <i class="fas fa-envelope"></i>
+                <span>Need help? Contact academic advisor</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- Optional: JavaScript for dashboard interactivity -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any dashboard-specific JavaScript here
+        console.log('Student dashboard loaded - {{ student.user.username }}');
+        
+        // You can add real-time features like:
+        // - Course registration countdown
+        // - Notification badges
+        // - Progress animations
+    });
+</script>
+
+{% endblock content %}

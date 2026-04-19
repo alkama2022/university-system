@@ -1,0 +1,350 @@
+  /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== COLOR SYSTEM ==========
+           Primary: Deep Blue (#0A3E6D) - trust, authority
+           Secondary: Teal (#2C7A6E) - calm, growth  
+           Accent: Fresh Green (#2E9A6E) - success, action
+        */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-hover: 0 20px 30px -12px rgba(0, 48, 73, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo p {
+            color: #b8d4f0;
+            font-size: 0.8rem;
+        }
+
+        /* ========== PAGE TITLE ========== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(46, 154, 110, 0.3);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        .student-count {
+            background: var(--green-light);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: var(--green-fresh);
+            font-weight: 600;
+        }
+
+        /* ========== STUDENT GRID ========== */
+        .student-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* ========== STUDENT CARD ========== */
+        .student-card {
+            background: var(--white-card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease backwards;
+            border: 1px solid rgba(46, 154, 110, 0.1);
+        }
+
+        .student-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--green-fresh);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger animation */
+        .student-card:nth-child(1) { animation-delay: 0.05s; }
+        .student-card:nth-child(2) { animation-delay: 0.1s; }
+        .student-card:nth-child(3) { animation-delay: 0.15s; }
+        .student-card:nth-child(4) { animation-delay: 0.2s; }
+        .student-card:nth-child(5) { animation-delay: 0.25s; }
+        .student-card:nth-child(6) { animation-delay: 0.3s; }
+
+        /* Student Image */
+        .student-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: #e9ecef;
+        }
+
+        .student-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .student-card:hover .student-image img {
+            transform: scale(1.05);
+        }
+
+        /* Student Info */
+        .student-info {
+            padding: 1.5rem;
+        }
+
+        .student-info h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .student-info p {
+            background: #f0f4f9;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--teal-mid);
+            margin: 0.5rem 0 1rem 0;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--blue-soft), var(--teal-mid));
+            color: white;
+            padding: 0.7rem 1.3rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--green-fresh);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(46, 154, 110, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 24px;
+            color: #7a8e9e;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .student-list {
+                gap: 1rem;
+            }
+        }
+
+
+/* ===============================
+   PAGINATION - ACADEMIC STYLE
+================================= */
+
+.pagination-container {
+    text-align: center;
+    margin-top: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Pagination List */
+.pagination {
+    list-style: none;
+    display: inline-flex;
+    gap: 6px;
+    padding: 0;
+}
+
+/* Page Items */
+.page-item {
+    display: inline-block;
+}
+
+/* Links */
+.page-link {
+    padding: 6px 12px;
+    border: 1px solid #d0d7e2;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #0A3E6D;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s ease;
+}
+
+/* Hover */
+.page-link:hover {
+    background: #0A3E6D;
+    color: white;
+}
+
+/* Active */
+.page-item.active .page-link {
+    background: #0A3E6D;
+    color: white;
+    font-weight: 600;
+}
+
+/* Disabled */
+.page-item.disabled .page-link {
+    color: #9aa5b1;
+    background: #f5f7fa;
+    cursor: not-allowed;
+}
+
+/* ===============================
+   JUMP TO PAGE
+================================= */
+
+.pagination-jump {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.pagination-jump input {
+    width: 60px;
+    padding: 4px;
+    text-align: center;
+    border: 1px solid #d0d7e2;
+    border-radius: 4px;
+}
+
+.pagination-jump button {
+    padding: 4px 10px;
+    border: none;
+    background: #2E9A6E;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination-jump button:hover {
+    background: #1e7a56;
+}
+
+/* ===============================
+   INFO TEXT
+================================= */
+
+.pagination-info {
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: #5f6c7b;
+}

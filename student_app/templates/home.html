@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faculty of Computing - Where future innovators are built">
+    <title>{{ selected_faculty.name }} | Faculty of Computing - EduSphere</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="{% static 'css/faculty_home.css' %}">
+</head>
+<body>
+
+<header class="academic-header">
+    <div class="header-inner">
+        <div class="logo">
+            <div class="logo-icon" aria-label="Graduation cap icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1>EduSphere</h1>
+                <p>Faculty of Computing</p>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <a href="{% url 'student_app:list' %}" class="students-link">
+                <i class="fas fa-users"></i>
+                <span>View Students</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'student_app:home' %}"><i class="fas fa-home"></i> Home</a></li>
+                <li aria-current="page">{{ selected_faculty.name }}</li>
+            </ol>
+        </nav>
+
+        <!-- Faculty Hero Section -->
+        <section class="faculty-hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="faculty-badge">
+                        <span class="badge-code">{{ selected_faculty.code }}</span>
+                    </div>
+                    <h1 class="faculty-title">
+                        Welcome to the<br>
+                        <span class="highlight">{{ selected_faculty.name }}</span>
+                    </h1>
+                    <div class="faculty-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Main Campus</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Est. 2020</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>Excellence in Tech</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    {% if selected_faculty.logo %}
+                        <img src="{{ selected_faculty.logo.url }}" alt="{{ selected_faculty.name }} logo" class="faculty-logo">
+                    {% else %}
+                        <div class="faculty-logo-placeholder">
+                            <i class="fas fa-university fa-5x"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Faculty Info Cards -->
+        <div class="faculty-info-grid">
+            <div class="info-card">
+                <div class="card-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <h3>About the Faculty</h3>
+                <p>{{ faculty.description|default:"Leading the way in technological innovation and academic excellence." }}</p>
+            </div>
+            
+            <div class="info-card">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Students Community</h3>
+                <p>Join a community of passionate learners and future tech leaders</p>
+            </div>
+            
+            <div class="info-card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Career Prospects</h3>
+                <p>Software Engineering, Data Science, AI, Cybersecurity & more</p>
+            </div>
+        </div>
+
+        <!-- Motivational Message Section -->
+        <section class="motivation-section">
+            <div class="motivation-header">
+                <i class="fas fa-quote-left"></i>
+                <h2>A Message to Our Students</h2>
+                <i class="fas fa-quote-right"></i>
+            </div>
+            
+            <div class="motivation-content">
+                <div class="motivation-card">
+                    <p class="motivation-text">
+                        This is not just a place of lectures, but a place where dreams are built and the future is created.
+                        Here, students are filled with <strong>courage</strong> and a strong desire to achieve greatness.
+                        You will experience discipline, late nights, and challenges—but all of it will shape you into a problem solver,
+                        an innovator, and a creator.
+                    </p>
+                    
+                    <div class="motivation-highlight">
+                        <i class="fas fa-fire"></i>
+                        <p><strong>This is not a place for comfort. It is a place for transformation.</strong></p>
+                    </div>
+                    
+                    <p class="motivation-text">
+                        Success in computing is for those who never give up, who keep learning, and who believe in themselves.
+                        You are not just students. You are future software engineers, data scientists, cybersecurity experts, 
+                        and AI innovators—the minds that will change the world.
+                    </p>
+                    
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p><strong>Success in computing is not for the weak.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Principles Section -->
+        <section class="principles-section">
+            <h3 class="section-title">
+                <i class="fas fa-gem"></i>
+                Principles for Success
+            </h3>
+            <div class="principles-grid">
+                <div class="principle-item">
+                    <div class="principle-icon">
+                        <i class="fas fa-chalkboard-user"></i>
+                    </div>
+                    <h4>Keep Going</h4>
+                    <p>When things don't make sense, persist and push forward</p>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Keep Learning</h4>
+                    <p>Learn when others quit and rest</p>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h4>Stay Focused</h4>
+                    <p>Stay focused when distractions come your way</p>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h4>Believe in Yourself</h4>
+                    <p>Believe in yourself when no one else does</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <div class="cta-text">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Ready to Challenge Yourself?</h3>
+                    <p>If you are ready to sacrifice comfort for growth and turn your dreams into reality...</p>
+                    <div class="cta-buttons">
+                        <a href="#departments" class="btn-primary">
+                            <i class="fas fa-arrow-down"></i> Explore Departments
+                        </a>
+                        <a href="{% url 'student_app:list' %}" class="btn-secondary">
+                            <i class="fas fa-users"></i> View Students
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Departments Section -->
+        <section id="departments" class="departments-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-building"></i>
+                    Our Departments
+                </h3>
+                <p class="section-subtitle">Choose your path to success</p>
+            </div>
+            
+            <div class="departments-grid">
+                {% for department in selected_faculty.departments.all %}
+                    <div class="department-card">
+                           <div class="department-icon">
+                               {% if department.logo %}
+                                   <img src="{{ department.logo.url }}" alt="{{ department.name }} logo" loading="lazy">
+                               {% else %}
+                                  <i class="fas fa-laptop-code fa-3x"></i>
+                               {% endif %}
+                        </div>
+                        <div class="department-info">
+                            <h4>{{ department.name }}</h4>
+                            <div class="department-code">{{ department.code }}</div>
+                            <p class="department-description">
+                                {{ department.description|default:"Excellence in technology education and innovation"|truncatewords:15 }}
+                            </p>
+                            
+                            <a href ="{% url 'student_app:depertment' department.id%}" href="#" class="department-link">
+                                Learn More <i class="fas fa-arrow-right"></i>
+                            </a>
+                    
+                        </div>
+                        
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No departments available yet.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Final Inspiration Section -->
+        <section class="inspiration-section">
+            <div class="inspiration-card">
+                <div class="inspiration-quote">
+                    <i class="fas fa-quote-left"></i>
+                    <p>Step into this journey with courage. Embrace the struggle. Trust the process.</p>
+                    <i class="fas fa-quote-right"></i>
+                </div>
+                <div class="inspiration-message">
+                    <p>One day, you won't just say "I studied computing" —</p>
+                    <p class="bold-message"><strong>You will say, "I became something powerful."</strong></p>
+                </div>
+                <div class="inspiration-footer">
+                    <i class="fas fa-star"></i>
+                    <span>Join one of the departments above to start your career</span>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4><i class="fas fa-graduation-cap"></i> EduSphere</h4>
+            <p>Inspiring minds, shaping futures since 2020</p>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-info-circle"></i> About Us</a></li>
+                <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Connect With Us</h4>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p><i class="far fa-copyright"></i> {% now "Y" %} EduSphere — Faculty of Computing</p>
+        <p class="footer-version">Version 2.0 | Academic Management System</p>
+    </div>
+</footer>
+
+<script src="{% static 'js/scripts.js' %}" defer></script>
+</body>
+</html>
