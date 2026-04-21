@@ -68,10 +68,11 @@ class SemesterAdmin(admin.ModelAdmin):
 # ============================================
 @admin.register(Lecturer)
 class LecturerAdmin(admin.ModelAdmin):
-    list_display = ('staff_id', 'full_name', 'email', 'user','department', 'is_active')
+    list_display = ('staff_id', 'name', 'email', 'user','department', 'is_active')
     list_filter = ('department', 'is_active', 'title')
     search_fields = ('staff_id', 'name', 'email')
     autocomplete_fields = ['department']
+    search_fields = ('name',)
 
 
 # ============================================
@@ -89,11 +90,12 @@ class VenueAdmin(admin.ModelAdmin):
 # ============================================
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('course', 'lecturer', 'venue', 'day', 'start_time', 'end_time')
-    list_filter = ('day', 'semester')
+    list_display = ('course', 'level' ,'lecturer', 'venue', 'day','date')
+    list_filter = ('day', 'semester','level')
     search_fields = ('course__code', 'lecturer__name', 'venue__name')
     autocomplete_fields = ['course', 'lecturer', 'venue', 'semester']
     ordering = ('day', 'start_time')
+    autocomplete_fields = ['course','lecturer','venue']
 
 
 # ============================================

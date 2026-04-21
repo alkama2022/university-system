@@ -1,8 +1,7 @@
 from django.db import models # type: ignore
 
 # Create your models here.
-# models.py - COMPLETE FIXED VERSION
-
+from datetime import date
 from django.db import models # type: ignore
 from django.core.validators import MinValueValidator, MaxValueValidator, ValidationError # type: ignore
 from django.utils import timezone  # type: ignore # ✅ FIXED: correct import
@@ -162,6 +161,9 @@ class Timetable(models.Model):
     lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, related_name='schedules')
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedules')
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='schedules')  # ✅ Added semester context
+    depertment = models.ForeignKey(Department,on_delete=models.CASCADE)
+    date = models.DateField(default=date.today)
+    
     day = models.CharField(max_length=3, choices=DAY_CHOICES)
     level = models.ForeignKey(Level,on_delete=models.SET_NULL,null=True)
     start_time = models.TimeField()

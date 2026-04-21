@@ -105,7 +105,8 @@ class CourseAdmin(admin.ModelAdmin):
     )
 
     ordering = ('-date_created',)
-
+    
+    search_fields = ('title',)
     readonly_fields = ('date_created',)
 
 
