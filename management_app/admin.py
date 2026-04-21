@@ -90,7 +90,7 @@ class VenueAdmin(admin.ModelAdmin):
 # ============================================
 @admin.register(Timetable)
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('course', 'level' ,'lecturer', 'venue', 'day','date')
+    list_display = ('course', 'level' ,'lecturer', 'venue', 'day', 'start_time', 'semester')
     list_filter = ('day', 'semester','level')
     search_fields = ('course__code', 'lecturer__name', 'venue__name')
     autocomplete_fields = ['course', 'lecturer', 'venue', 'semester']
