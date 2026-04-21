@@ -8,7 +8,7 @@ from management_app.models import Faculty,Semester,Department,Lecturer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 
-# @login_required
+@login_required
 def student_propile(request):
     student = Student.objects.get(user = request.user)
     context = {'student':student}
@@ -38,11 +38,12 @@ def show_depertment(request,dept_id):
         'courses': courses,
     }
     return render(request,'depertment.html',context)
+
 @login_required
 def home(request):
-
     selected_faculty = Faculty.objects.prefetch_related('departments').first()
     return render(request,'home.html',{'selected_faculty':selected_faculty})
+
 @login_required
 def student_data(request):
     if request.method == 'POST':
@@ -56,6 +57,7 @@ def student_data(request):
     form = StudentForm()
     return render(request,'student.html',{'form' : form})
 
+@login_required
 def courses(request):
 
     if request.method == 'POST':

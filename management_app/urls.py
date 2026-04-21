@@ -3,5 +3,5 @@ from . import views
 app_name = 'management_app'
 
 urlpatterns = [
-    path('',views.show_tible,name='show_tible')
+    path('',views.show_timetable_view,name='show_tible')
 ]

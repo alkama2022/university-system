@@ -28,7 +28,7 @@ class Faculty(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=10, unique=True)
-    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments')
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments',default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     logo = models.ImageField(upload_to='depertiment/', null=True, blank=True)
@@ -161,7 +161,7 @@ class Timetable(models.Model):
     lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, related_name='schedules')
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedules')
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='schedules')  # ✅ Added semester context
-    department = models.ForeignKey(Department,on_delete=models.CASCADE,default=1)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
     day = models.CharField(max_length=3, choices=DAY_CHOICES)
     level = models.ForeignKey(Level,on_delete=models.SET_NULL,null=True)
     start_time = models.TimeField()
