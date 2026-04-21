@@ -161,9 +161,8 @@ class Timetable(models.Model):
     lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, related_name='schedules')
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedules')
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='schedules')  # ✅ Added semester context
-    depertment = models.ForeignKey(Department,on_delete=models.CASCADE)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
-    
     day = models.CharField(max_length=3, choices=DAY_CHOICES)
     level = models.ForeignKey(Level,on_delete=models.SET_NULL,null=True)
     start_time = models.TimeField()
