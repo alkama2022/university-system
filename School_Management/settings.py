@@ -124,8 +124,8 @@ INTERNAL_IPS = [
 
 import os
 
-# Base directory (already usually set)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# # Base directory (already usually set)
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # URL prefix for static files
 STATIC_URL = '/static/'
