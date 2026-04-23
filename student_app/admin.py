@@ -1,5 +1,5 @@
 from django.contrib import admin # type: ignore
-from .models import Student,Registration,Session,Course
+from .models import Student,Registration,Session,Course,Complaint
 
 # ================================
 # STUDENT ADMIN
@@ -144,3 +144,34 @@ class EnrollmentAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Session)
+
+@admin.register(Complaint)
+class ComplaintAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'student',
+        'course',
+        'session',
+        'complaint_type'
+    )
+
+    list_filter = (
+        'session',
+        'priority',
+        'subject'
+    )
+
+    search_fields = (
+        'student__first_name',
+        'student__last_name',
+        'student__registration_number',
+        'course__course_name'
+    )
+
+    ordering = ('-created_at',)
+
+    readonly_fields = ('created_at',)
+
+    # Optimize ForeignKey dropdowns (VERY IMPORTANT ⚡)
+    autocomplete_fields = ['student', 'course']
+    
