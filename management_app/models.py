@@ -414,13 +414,13 @@ class Complaint(models.Model):
     
     student = models.ForeignKey('student_app.Student',
         on_delete=models.CASCADE,
-        related_name='complaints'
+        related_name='management_complaints'
     )
     course = models.ForeignKey('student_app.Course',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='complaints'
+        related_name='management_complaints'
     )
     complaint_type = models.CharField(max_length=20, choices=COMPLAINT_TYPES)
     subject = models.CharField(max_length=200)
