@@ -13,6 +13,39 @@ def student_propile(request):
     student = Student.objects.get(user = request.user)
     context = {'student':student}
     return render(request,'profile.html',context)
+from django.db.models import Prefetch
+
+# @login_required
+# def show_depertment(request, dept_id):
+#     """Optimized: fewer queries + lower memory usage"""
+
+#     department = get_object_or_404(
+#         Department.objects.prefetch_related(
+#             Prefetch(
+#                 'lecturers',
+#                 queryset=Lecturer.objects.filter(is_active=True)
+#                 .only('id', 'name', 'roll')  # fetch only needed fields
+#                 .order_by('roll', 'name')
+#             ),
+#             Prefetch(
+#                 'courses',
+#                 queryset=Course.objects.filter(is_active=True)
+#                 .only('id', 'code', 'level', 'depertiment_id')
+#                 .order_by('level', 'code')
+#             )
+#         ),
+#         pk=dept_id
+#     )
+
+#     context = {
+#         'department': department,
+#         # Use prefetched data (NO extra queries)
+#         'lecturers': department.lecturers.all(),
+#         'courses': department.courses.all(),
+#     }
+
+#     return render(request, 'depertment.html', context)
+
 @login_required
 def show_depertment(request,dept_id):
     """Display department details with staff and courses"""
@@ -30,7 +63,7 @@ def show_depertment(request,dept_id):
     courses = Course.objects.filter(
         depertiment=department,
         is_active=True
-    ).order_by('level', 'code')
+    ).select_related('depertiment').order_by('level', 'code')
 
     context = {
         'department': department,
@@ -38,6 +71,7 @@ def show_depertment(request,dept_id):
         'courses': courses,
     }
     return render(request,'depertment.html',context)
+
 
 @login_required
 def home(request):

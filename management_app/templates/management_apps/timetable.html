@@ -3,6 +3,665 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Timetable | EduSphere Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== COLOR SYSTEM ========== */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 12px 28px rgba(0, 32, 64, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            color: #b8d4f0;
+            font-size: 0.7rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 40px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-soft) 100%);
+            border-radius: 28px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            color: var(--green-fresh);
+        }
+
+        .student-info {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.85rem;
+        }
+
+        .print-btn {
+            margin-top: 1rem;
+        }
+
+        .btn-print {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-fresh);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-print:hover {
+            background: var(--teal-mid);
+            transform: translateY(-2px);
+        }
+
+        /* ========== SEMESTER SECTION ========== */
+        .semester-section {
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.5s ease backwards;
+        }
+
+        .semester-section:first-of-type {
+            animation-delay: 0.05s;
+        }
+
+        .semester-section:last-of-type {
+            animation-delay: 0.1s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .semester-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--green-fresh);
+        }
+
+        .semester-header i {
+            font-size: 1.8rem;
+            color: var(--green-fresh);
+        }
+
+        .semester-header h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+        }
+
+        /* ========== DAY CARDS ========== */
+        .day-card {
+            background: var(--white-card);
+            border-radius: 24px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .day-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, var(--teal-mid), var(--blue-soft));
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .day-header i {
+            font-size: 1.3rem;
+        }
+
+        .day-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* ========== TIMETABLE TABLE ========== */
+        .timetable-wrapper {
+            overflow-x: auto;
+        }
+
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .timetable-table th {
+            background: var(--green-light);
+            color: var(--blue-deep);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-bottom: 2px solid var(--green-fresh);
+        }
+
+        .timetable-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eef2f6;
+            color: #2c3f4f;
+            vertical-align: middle;
+        }
+
+        .timetable-table tr:hover {
+            background: var(--green-light);
+        }
+
+        /* Time styling */
+        .time-cell {
+            font-weight: 600;
+            color: var(--blue-deep);
+        }
+
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eef2fa;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .course-code {
+            font-weight: 700;
+            color: var(--blue-deep);
+            background: rgba(10, 62, 109, 0.08);
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .lecturer-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lecturer-name i {
+            color: var(--green-fresh);
+            font-size: 0.8rem;
+        }
+
+        .venue-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .venue-name i {
+            color: var(--teal-mid);
+            font-size: 0.8rem;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white-card);
+            border-radius: 24px;
+            color: #7a8e9e;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--teal-mid);
+        }
+
+        /* ========== FOOTER ========== */
+        .academic-footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        /* ========== PRINT STYLES ========== */
+        @media print {
+            .academic-header,
+            .print-btn,
+            .nav-menu,
+            .academic-footer {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                padding: 0;
+                margin: 0;
+            }
+            
+            .page-header {
+                background: var(--blue-deep);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .day-header {
+                background: var(--teal-mid);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .timetable-table th {
+                background: var(--green-light);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .semester-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .timetable-table th,
+            .timetable-table td {
+                padding: 0.7rem;
+                font-size: 0.85rem;
+            }
+            
+            .day-header {
+                padding: 0.8rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="academic-header">
+    <div class="header-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="logo-text">
+                <h1>EduSphere</h1>
+                <p>Class Timetable</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="{% url 'student_app:home' %}" class="nav-link">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{% url 'student_app:dashboard' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'student_app:student_propile' %}" class="nav-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="{% url 'student_app:logout_view' %}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>
+            <i class="fas fa-calendar-week"></i>
+            My Class Timetable
+        </h1>
+        <div class="student-info">
+            <span class="info-badge">
+                <i class="fas fa-user-graduate"></i> {{ student }}
+            </span>
+            <span class="info-badge">
+                <i class="fas fa-calendar-alt"></i> Academic Year: 2024/2025
+            </span>
+        </div>
+        <div class="print-btn">
+            <button onclick="window.print()" class="btn-print">
+                <i class="fas fa-print"></i> Print Timetable
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== FIRST SEMESTER ========== -->
+    <div class="semester-section">
+        <div class="semester-header">
+            <i class="fas fa-sun"></i>
+            <h2>First Semester Timetable</h2>
+        </div>
+
+        {% if first_semester_timetable %}
+            {% for day, schedules in first_semester_timetable%}
+                <div class="day-card">
+                    <div class="day-header">
+                        <i class="fas fa-calendar-day"></i>
+                        <h3>{{ day }}</h3>
+                    </div>
+                    <div class="timetable-wrapper">
+                        <table class="timetable-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-clock"></i> Time</th>
+                                    <th><i class="fas fa-book"></i> Course</th>
+                                    <th><i class="fas fa-chalkboard-user"></i> Lecturer</th>
+                                    <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in schedules %}
+                                <tr>
+                                    <td class="time-cell">
+                                        <span class="time-badge">
+                                            <i class="fas fa-play"></i> {{ t.start_time|time:"g:i A" }}
+                                        </span>
+                                        <span style="margin: 0 4px;">→</span>
+                                        <span class="time-badge">
+                                            <i class="fas fa-stop"></i> {{ t.end_time|time:"g:i A" }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="course-code">{{ t.course.code }}</span>
+                                        <span style="font-size: 0.8rem; color: #6b7c8f; margin-left: 8px;">{{ t.course.title|truncatechars:35 }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="lecturer-name">
+                                            <i class="fas fa-user-tie"></i> {{ t.lecturer.name }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="venue-name">
+                                            <i class="fas fa-location-dot"></i> {{ t.venue.name }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <p>No timetable available for First Semester</p>
+                <small>Please check back later or contact your academic advisor.</small>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- ========== SECOND SEMESTER ========== -->
+    <div class="semester-section">
+        <div class="semester-header">
+            <i class="fas fa-moon"></i>
+            <h2>Second Semester Timetable</h2>
+        </div>
+
+        {% if second_semester_timetable %}
+            {% for day, schedules in second_semester_timetable%}
+                <div class="day-card">
+                    <div class="day-header">
+                        <i class="fas fa-calendar-day"></i>
+                        <h3>{{ day }}</h3>
+                    </div>
+                    <div class="timetable-wrapper">
+                        <table class="timetable-table">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-clock"></i> Time</th>
+                                    <th><i class="fas fa-book"></i> Course</th>
+                                    <th><i class="fas fa-chalkboard-user"></i> Lecturer</th>
+                                    <th><i class="fas fa-map-marker-alt"></i> Venue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in schedules %}
+                                <tr>
+                                    <td class="time-cell">
+                                        <span class="time-badge">
+                                            <i class="fas fa-play"></i> {{ t.start_time|time:"g:i A" }}
+                                        </span>
+                                        <span style="margin: 0 4px;">→</span>
+                                        <span class="time-badge">
+                                            <i class="fas fa-stop"></i> {{ t.end_time|time:"g:i A" }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="course-code">{{ t.course.code }}</span>
+                                        <span style="font-size: 0.8rem; color: #6b7c8f; margin-left: 8px;">{{ t.course.title|truncatechars:35 }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="lecturer-name">
+                                            <i class="fas fa-user-tie"></i> {{ t.lecturer }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="venue-name">
+                                            <i class="fas fa-location-dot"></i> {{ t.venue.name }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <p>No timetable available for Second Semester</p>
+                <small>Please check back later or contact your academic advisor.</small>
+            </div>
+        {% endif %}
+    </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="academic-footer">
+    <p>
+        <i class="far fa-copyright"></i> 2025 EduSphere — 
+        <i class="fas fa-clock"></i> Timetable subject to change |
+        <i class="fas fa-envelope"></i> Contact HOD for updates
+    </p>
+</footer>
+
+</body>
+</html>
+{% comment %} {% if first_semester_timetable %}
+  
+  {% for timetable in first_semester_timetable %}
+    
+  {% endfor %}
+    
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timetable | EduSphere Academic Portal</title>
     
     <!-- Google Fonts -->
@@ -596,4 +1255,4 @@
 </footer>
 
 </body>
-</html>
+</html> {% endcomment %}

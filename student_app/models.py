@@ -272,7 +272,52 @@ def register_courses_for_session(student, course_ids, session):
     }
 
 
-
+class Student_Complaint(models.Model):
+    PRIORITY_CHOICES = [
+        ('LOW', 'Low'),
+        ('MEDIUM', 'Medium'),
+        ('HIGH', 'High'),
+        ('URGENT', 'Urgent'),
+    ]
+    
+    STATUS_CHOICES = [
+        
+        ('PENDING', 'Pending Review'),
+        ('IN_REVIEW', 'Under Review'),
+        ('ESCALATED', 'Escalated to HOD'),
+        ('RESOLVED', 'Resolved'),
+        ('REJECTED', 'Rejected'),
+        ('CLOSED', 'Closed'),
+    ]
+    
+    COMPLAINT_TYPES = [
+        
+        ('RESULT', 'Result Discrepancy'),
+        ('COURSE', 'Course Registration Issue'),
+        ('SCHEDULE', 'Schedule Conflict'),
+        ('LECTURER', 'Lecturer Concern'),
+        ('OTHER', 'Other Academic Issue'),
+    ]
+    
+    student_name = models.ForeignKey(Student,
+        on_delete=models.CASCADE,
+        related_name='complaints'
+    )
+    course_name = models.ForeignKey(Course,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='complaints'
+    )
+    complaint_type_status = models.CharField(max_length=20, choices=COMPLAINT_TYPES)
+    subject_name = models.CharField(max_length=200)
+    description_status = models.TextField()
+    priority_type = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
+    status_type = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    # Timestamps
+    created_at_date = models.DateTimeField(auto_now_add=True)
+    updated_at_date = models.DateTimeField(auto_now=True)
+    
 
 
 

@@ -217,7 +217,8 @@ class Result(models.Model):
     # Core relationships
     student = models.ForeignKey('student_app.Student',on_delete=models.CASCADE,related_name='results')
     course = models.ForeignKey('student_app.Course',on_delete=models.CASCADE, related_name='results')
-    
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
+    level = models.ForeignKey(Level,on_delete=models.SET_NULL,null=True)
     # ✅ ADDED missing fields
     semester = models.ForeignKey(
         Semester,
