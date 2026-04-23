@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints | EduSphere Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== COLOR SYSTEM ========== */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 12px 28px rgba(0, 32, 64, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        /* Priority Colors */
+        .priority-low { border-left-color: #10b981; }
+        .priority-medium { border-left-color: #f59e0b; }
+        .priority-high { border-left-color: #ef4444; }
+        .priority-urgent { border-left-color: #7c3aed; }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            color: #b8d4f0;
+            font-size: 0.7rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 40px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-soft) 100%);
+            border-radius: 28px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            color: var(--green-fresh);
+        }
+
+        .complaint-count {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* ========== FILTER SECTION ========== */
+        .filter-section {
+            background: var(--white-card);
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--blue-deep);
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-bg);
+            cursor: pointer;
+        }
+
+        .new-complaint-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--green-fresh);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .new-complaint-btn:hover {
+            background: var(--teal-mid);
+            transform: translateY(-2px);
+        }
+
+        /* ========== COMPLAINT CARDS ========== */
+        .complaint-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .complaint-card {
+            background: var(--white-card);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease backwards;
+            border-left: 5px solid;
+        }
+
+        .complaint-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card staggered animation */
+        .complaint-card:nth-child(1) { animation-delay: 0.05s; }
+        .complaint-card:nth-child(2) { animation-delay: 0.1s; }
+        .complaint-card:nth-child(3) { animation-delay: 0.15s; }
+        .complaint-card:nth-child(4) { animation-delay: 0.2s; }
+        .complaint-card:nth-child(5) { animation-delay: 0.25s; }
+
+        /* Card Header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .complaint-subject {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .complaint-subject i {
+            color: var(--green-fresh);
+        }
+
+        /* Badges */
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-light);
+            color: var(--green-fresh);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .priority-low-badge { background: #d1fae5; color: #065f46; }
+        .priority-medium-badge { background: #fed7aa; color: #9a3412; }
+        .priority-high-badge { background: #fee2e2; color: #991b1b; }
+        .priority-urgent-badge { background: #ede9fe; color: #5b21b6; }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid #eef2f6;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .info-item i {
+            width: 20px;
+            color: var(--green-fresh);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--blue-deep);
+        }
+
+        .info-value {
+            color: #2c3f4f;
+        }
+
+        /* Description Section */
+        .description-section {
+            margin: 1rem 0;
+        }
+
+        .description-label {
+            font-weight: 600;
+            color: var(--blue-deep);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .description-label i {
+            color: var(--green-fresh);
+        }
+
+        .complaint-description {
+            background: var(--gray-bg);
+            padding: 1rem;
+            border-radius: 16px;
+            color: #2c3f4f;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            background: var(--white-card);
+            border-radius: 24px;
+            color: #7a8e9e;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--teal-mid);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--blue-deep);
+        }
+
+        /* Footer */
+        .academic-footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .card-header {
+                flex-direction: column;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="academic-header">
+    <div class="header-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="logo-text">
+                <h1>EduSphere</h1>
+                <p>Complaint Management</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="{% url 'student_app:home' %}" class="nav-link">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{% url 'student_app:dashboard' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'student_app:logout_view' %}" class="nav-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="{% url 'student_app:create_complaint' %}" class="nav-link">
+                <i class="fas fa-plus-circle"></i> New Complaint
+            </a>
+            <a href="{% url 'student_app:logout_view' %}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>
+            <i class="fas fa-list-alt"></i>
+            My Complaints
+        </h1>
+        <div class="complaint-count">
+            <i class="fas fa-file-alt"></i> Total: {{ complaints|length }}
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <span class="filter-label"><i class="fas fa-filter"></i> Filter by Priority:</span>
+            <select id="priorityFilter" class="filter-select" onchange="filterComplaints()">
+                <option value="all">All Priorities</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+                <option value="URGENT">Urgent</option>
+            </select>
+        </div>
+        
+        <a href="{% url 'student_app:create_complaint' %}" class="new-complaint-btn">
+            <i class="fas fa-plus-circle"></i> New Complaint
+        </a>
+    </div>
+
+    <!-- Complaint List -->
+    {% if complaints %}
+        <div class="complaint-list" id="complaintList">
+            {% for complaint in complaints %}
+                <div class="complaint-card priority-{{ complaint.priority|lower }}" data-priority="{{ complaint.priority }}">
+                    
+                    <!-- Card Header -->
+                    <div class="card-header">
+                        <div class="complaint-subject">
+                            <i class="fas fa-comment"></i>
+                            {{ complaint.subject|truncatechars:60 }}
+                        </div>
+                        <div>
+                            <span class="type-badge">
+                                <i class="fas fa-tag"></i> {{ complaint.get_complaint_type_display }}
+                            </span>
+                            <span class="priority-badge priority-{{ complaint.priority|lower }}-badge" style="margin-left: 8px;">
+                                <i class="fas fa-flag"></i> {{ complaint.get_priority_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Info Grid -->
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="info-label">Date:</span>
+                            <span class="info-value">{{ complaint.created_at|date:"F d, Y" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span class="info-label">Time:</span>
+                            <span class="info-value">{{ complaint.created_at|date:"g:i A" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar-week"></i>
+                            <span class="info-label">Session:</span>
+                            <span class="info-value">{{ complaint.session|default:"Not specified" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="description-section">
+                        <div class="description-label">
+                            <i class="fas fa-align-left"></i>
+                            Description:
+                        </div>
+                        <div class="complaint-description">
+                            {{ complaint.description|linebreaks }}
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No Complaints Yet</h3>
+            <p>You haven't submitted any complaints. If you have an academic concern, please submit a complaint.</p>
+            <a href="{% url 'student_app:complaint_form' %}" class="new-complaint-btn" style="margin-top: 1rem; display: inline-flex;">
+                <i class="fas fa-plus-circle"></i> Submit Your First Complaint
+            </a>
+        </div>
+    {% endif %}
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="academic-footer">
+    <p>
+        <i class="far fa-copyright"></i> 2025 EduSphere — 
+        <i class="fas fa-handshake"></i> We take your concerns seriously |
+        <i class="fas fa-clock"></i> Response within 48 hours
+    </p>
+</footer>
+
+<script>
+    function filterComplaints() {
+        const priorityFilter = document.getElementById('priorityFilter').value;
+        const complaints = document.querySelectorAll('.complaint-card');
+        let visibleCount = 0;
+        
+        complaints.forEach(complaint => {
+            const priority = complaint.getAttribute('data-priority');
+            
+            if (priorityFilter === 'all' || priority === priorityFilter) {
+                complaint.style.display = 'block';
+                visibleCount++;
+            } else {
+                complaint.style.display = 'none';
+            }
+        });
+        
+        // Update visible count
+        const countDisplay = document.querySelector('.complaint-count');
+        const total = complaints.length;
+        
+        if (priorityFilter !== 'all') {
+            countDisplay.innerHTML = `<i class="fas fa-filter"></i> Showing: ${visibleCount} / ${total}`;
+        } else {
+            countDisplay.innerHTML = `<i class="fas fa-file-alt"></i> Total: ${total}`;
+        }
+    }
+</script>
+
+</body>
+</html>

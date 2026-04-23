@@ -8,7 +8,11 @@ from management_app.models import Faculty,Department,Lecturer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 
-
+def complaint_list(request):
+    student = request.user.student
+    complaints = student.complaints.select_related('course').all()
+    context = {'complaints': complaints}
+    return render(request, 'complaint_list.html', context)
 @login_required
 def create_complaint(request):
     student = request.user.student

@@ -1,12 +1,610 @@
-<html>
-    <head>
-        <title>Complaint Form</title>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint | EduSphere Academic Portal</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f9ff 0%, #eef2f7 100%);
+            color: #1a2c3e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* ========== COLOR SYSTEM ========== */
+        :root {
+            --blue-deep: #0A3E6D;
+            --blue-soft: #1e5a88;
+            --teal-mid: #2C7A6E;
+            --green-fresh: #2E9A6E;
+            --green-light: #e8f5ed;
+            --gray-bg: #f8fafc;
+            --white-card: #ffffff;
+            --warning-red: #dc2626;
+            --warning-orange: #f59e0b;
+            --shadow-sm: 0 8px 20px rgba(0, 32, 64, 0.08);
+            --shadow-md: 0 12px 28px rgba(0, 32, 64, 0.12);
+            --transition: all 0.3s ease;
+        }
+
+        /* ========== HEADER ========== */
+        .academic-header {
+            background: var(--blue-deep);
+            border-bottom: 4px solid var(--green-fresh);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(46, 154, 110, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .logo-text h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            color: #b8d4f0;
+            font-size: 0.7rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: 40px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link:hover {
+            background: var(--green-fresh);
+            transform: translateY(-2px);
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-soft) 100%);
+            border-radius: 28px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            color: var(--green-fresh);
+        }
+
+        .page-header p {
+            color: #b8d4f0;
+            font-size: 0.95rem;
+        }
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: var(--white-card);
+            border-radius: 28px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--blue-deep);
+            font-size: 0.9rem;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: var(--green-fresh);
+        }
+
+        .required-field::after {
+            content: '*';
+            color: var(--warning-red);
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            background: var(--gray-bg);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--green-fresh);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(46, 154, 110, 0.1);
+        }
+
+        /* Priority Styling - Visual indicators */
+        .priority-low { border-left: 4px solid #10b981; }
+        .priority-medium { border-left: 4px solid #f59e0b; }
+        .priority-high { border-left: 4px solid #ef4444; }
+        .priority-urgent { border-left: 4px solid #7c3aed; }
+
+        /* Help Text */
+        .help-text {
+            font-size: 0.75rem;
+            color: #7a8e9e;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .help-text i {
+            font-size: 0.7rem;
+        }
+
+        /* Error Messages */
+        .errorlist {
+            list-style: none;
+            background: #fee2e2;
+            color: var(--warning-red);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            margin-top: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .errorlist li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 0.7rem;
+            color: #7a8e9e;
+            margin-top: 0.3rem;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-submit {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--green-fresh), var(--teal-mid));
+            color: white;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 154, 110, 0.3);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: transparent;
+            border: 2px solid var(--teal-mid);
+            color: var(--teal-mid);
+            padding: 1rem 1.5rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-cancel:hover {
+            background: var(--teal-mid);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--green-light);
+            border-radius: 20px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid var(--green-fresh);
+        }
+
+        .info-box i {
+            font-size: 1.5rem;
+            color: var(--green-fresh);
+        }
+
+        .info-box p {
+            font-size: 0.85rem;
+            color: var(--blue-deep);
+        }
+
+        /* Footer */
+        .academic-footer {
+            background: #0a2a3b;
+            color: #b0c8da;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-card {
+                padding: 1.2rem;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
 <body>
-    <h1>Submit a Complaint</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
+
+<!-- ========== HEADER ========== -->
+<header class="academic-header">
+    <div class="header-container">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="logo-text">
+                <h1>EduSphere</h1>
+                <p>Student Support Portal</p>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="{% url 'student_app:home' %}" class="nav-link">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{% url 'student_app:dashboard' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'student_app:student_propile' %}" class="nav-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            {% comment %}  {% url 'student_app:complaint_list' %} {% endcomment %}
+            <a href="#" class="nav-link">
+                <i class="fas fa-list"></i> My Complaints
+            </a>
+            <a href="{% url 'student_app:logout_view' %}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="container">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>
+            <i class="fas fa-comment-dots"></i>
+            Submit a Complaint
+        </h1>
+        <p>We take your concerns seriously. Please provide detailed information to help us resolve your issue quickly.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+        
+        <!-- Info Box -->
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            <p>All complaints are confidential and will be reviewed within 2-3 business days. Urgent matters will be escalated immediately.</p>
+        </div>
+
+        <!-- Form -->
+        <form method="post" id="complaintForm">
+            {% csrf_token %}
+
+            <!-- Row 1: Complaint Type + Priority -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.complaint_type.id_for_label }}">
+                        <i class="fas fa-tag"></i> Complaint Type <span class="required-field"></span>
+                    </label>
+                    {{ form.complaint_type }}
+                    {% if form.complaint_type.help_text %}
+                        <div class="help-text"><i class="fas fa-info-circle"></i> {{ form.complaint_type.help_text }}</div>
+                    {% endif %}
+                    {% if form.complaint_type.errors %}
+                        <ul class="errorlist">{{ form.complaint_type.errors }}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.priority.id_for_label }}">
+                        <i class="fas fa-flag"></i> Priority Level <span class="required-field"></span>
+                    </label>
+                    {{ form.priority }}
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i> 
+                        <span id="priorityHelp">Low: Non-urgent | Medium: Normal | High: Important | Urgent: Requires immediate attention</span>
+                    </div>
+                    {% if form.priority.errors %}
+                        <ul class="errorlist">{{ form.priority.errors }}</ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Row 2: Course + Session -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.course.id_for_label }}">
+                        <i class="fas fa-book"></i> Related Course (Optional)
+                    </label>
+                    {{ form.course }}
+                    <div class="help-text"><i class="fas fa-info-circle"></i> Select the course related to your complaint, if applicable</div>
+                    {% if form.course.errors %}
+                        <ul class="errorlist">{{ form.course.errors }}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.session.id_for_label }}">
+                        <i class="fas fa-calendar-alt"></i> Academic Session <span class="required-field"></span>
+                    </label>
+                    {{ form.session }}
+                    {% if form.session.errors %}
+                        <ul class="errorlist">{{ form.session.errors }}</ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="form-group">
+                <label for="{{ form.subject.id_for_label }}">
+                    <i class="fas fa-heading"></i> Subject <span class="required-field"></span>
+                </label>
+                {{ form.subject }}
+                <div class="help-text"><i class="fas fa-info-circle"></i> Write a clear, concise subject line (e.g., "Result discrepancy in MATH 101")</div>
+                {% if form.subject.errors %}
+                    <ul class="errorlist">{{ form.subject.errors }}</ul>
+                {% endif %}
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">
+                    <i class="fas fa-align-left"></i> Description <span class="required-field"></span>
+                </label>
+                {{ form.description }}
+                <div class="char-counter">
+                    <i class="fas fa-keyboard"></i> <span id="charCount">0</span> characters
+                </div>
+                <div class="help-text">
+                    <i class="fas fa-info-circle"></i> 
+                    Please provide as much detail as possible. Include dates, course codes, and any relevant information.
+                </div>
+                {% if form.description.errors %}
+                    <ul class="errorlist">{{ form.description.errors }}</ul>
+                {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> Submit Complaint
+                </button>
+                <a href="{% url 'student_app:dashboard' %}" class="btn-cancel">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="academic-footer">
+    <p>
+        <i class="far fa-copyright"></i> 2025 EduSphere — 
+        <i class="fas fa-handshake"></i> Your voice matters |
+        <i class="fas fa-clock"></i> Response within 48 hours
+    </p>
+</footer>
+
+<script>
+    // Character counter for description field
+    const descriptionField = document.querySelector('#id_description');
+    const charCountSpan = document.getElementById('charCount');
+    
+    if (descriptionField && charCountSpan) {
+        function updateCharCount() {
+            charCountSpan.textContent = descriptionField.value.length;
+        }
+        descriptionField.addEventListener('input', updateCharCount);
+        updateCharCount();
+    }
+    
+    // Priority help text update
+    const prioritySelect = document.querySelector('#id_priority');
+    const priorityHelp = document.getElementById('priorityHelp');
+    
+    if (prioritySelect && priorityHelp) {
+        const priorityMessages = {
+            'LOW': 'Low Priority: Non-urgent matters, suggestions, or general inquiries.',
+            'MEDIUM': 'Medium Priority: Standard academic concerns that need attention.',
+            'HIGH': 'High Priority: Important issues affecting academic progress.',
+            'URGENT': 'Urgent: Critical matters requiring immediate escalation.'
+        };
+        
+        function updatePriorityHelp() {
+            const selected = prioritySelect.value;
+            if (priorityMessages[selected]) {
+                priorityHelp.textContent = priorityMessages[selected];
+            }
+        }
+        
+        prioritySelect.addEventListener('change', updatePriorityHelp);
+        updatePriorityHelp();
+    }
+    
+    // Add visual priority classes to select (optional styling)
+    const stylePrioritySelect = () => {
+        if (prioritySelect) {
+            const priorityColors = {
+                'LOW': '#10b981',
+                'MEDIUM': '#f59e0b', 
+                'HIGH': '#ef4444',
+                'URGENT': '#7c3aed'
+            };
+            prioritySelect.addEventListener('change', () => {
+                prioritySelect.style.borderLeftColor = priorityColors[prioritySelect.value] || '#e2e8f0';
+            });
+        }
+    };
+    stylePrioritySelect();
+</script>
+
+</body>
 </html>
