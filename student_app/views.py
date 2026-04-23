@@ -1,50 +1,38 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .forms import StudentForm,CourseForm
+from .forms import StudentForm,CourseForm,ComplaintForm
 from .models import Registration,Student,Course,Session
 from django.contrib import messages
 from django.db.models import Prefetch
 from django.core.paginator import Paginator
-from management_app.models import Faculty,Semester,Department,Lecturer
+from management_app.models import Faculty,Department,Lecturer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def create_complaint(request):
+    student = request.user.student
+
+    if request.method == 'POST':
+        form = ComplaintForm(request.POST, student=student)
+        if form.is_valid():
+            complaint = form.save(commit=False)
+            complaint.student = student
+            complaint.save()
+            messages.success(request, "Complaint submitted successfully")
+            return redirect('student_app:dashboard')
+        messages.error(request, "Please correct the errors below")
+        return render(request, 'complaint_form.html', {'form': form})
+    else:
+        form = ComplaintForm(student=student)
+
+    return render(request, 'complaint_form.html', {'form': form})
 
 @login_required
 def student_propile(request):
     student = Student.objects.get(user = request.user)
     context = {'student':student}
     return render(request,'profile.html',context)
-from django.db.models import Prefetch
-
-# @login_required
-# def show_depertment(request, dept_id):
-#     """Optimized: fewer queries + lower memory usage"""
-
-#     department = get_object_or_404(
-#         Department.objects.prefetch_related(
-#             Prefetch(
-#                 'lecturers',
-#                 queryset=Lecturer.objects.filter(is_active=True)
-#                 .only('id', 'name', 'roll')  # fetch only needed fields
-#                 .order_by('roll', 'name')
-#             ),
-#             Prefetch(
-#                 'courses',
-#                 queryset=Course.objects.filter(is_active=True)
-#                 .only('id', 'code', 'level', 'depertiment_id')
-#                 .order_by('level', 'code')
-#             )
-#         ),
-#         pk=dept_id
-#     )
-
-#     context = {
-#         'department': department,
-#         # Use prefetched data (NO extra queries)
-#         'lecturers': department.lecturers.all(),
-#         'courses': department.courses.all(),
-#     }
-
-#     return render(request, 'depertment.html', context)
 
 @login_required
 def show_depertment(request,dept_id):
@@ -255,4 +243,3 @@ def dashboard(request):
     return render(request, 'dashboard.html', {
         'student': student
     })
-    
