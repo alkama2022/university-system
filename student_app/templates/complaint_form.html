@@ -410,8 +410,8 @@
             <a href="{% url 'student_app:student_propile' %}" class="nav-link">
                 <i class="fas fa-user"></i> Profile
             </a>
-            {% comment %}  {% url 'student_app:complaint_list' %} {% endcomment %}
-            <a href="#" class="nav-link">
+            {% comment %}  {% endcomment %}
+            <a href="{% url 'student_app:complaint_list' %} " class="nav-link">
                 <i class="fas fa-list"></i> My Complaints
             </a>
             <a href="{% url 'student_app:logout_view' %}" class="nav-link">
