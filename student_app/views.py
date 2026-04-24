@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .forms import StudentForm,CourseForm,ComplaintForm
+from .forms import ComplaintForm
 from .models import Registration,Student,Course,Session
 from django.contrib import messages
 from django.db.models import Prefetch
@@ -69,34 +69,6 @@ def show_depertment(request,dept_id):
 def home(request):
     selected_faculty = Faculty.objects.prefetch_related('departments').first()
     return render(request,'home.html',{'selected_faculty':selected_faculty})
-
-@login_required
-def student_data(request):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'You Have Successifully Register')
-            return redirect('home')
-        messages.error(request,'Invalid data Please enter a valid data')
-        return redirect('student')
-    form = StudentForm()
-    return render(request,'student.html',{'form' : form})
-
-@login_required
-def courses(request):
-
-    if request.method == 'POST':
-        form = CourseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'You Have Successifully Register')
-            return redirect('home')
-        messages.error(request,'Invalid data Please enter a valid data')
-        return redirect('student')
-    form = CourseForm()
-    return render(request,'courses.html',{'form' : form})
-
 
 
 MAX_UNITS = 40

@@ -95,7 +95,6 @@ class TimetableAdmin(admin.ModelAdmin):
     search_fields = ('course__code', 'lecturer__name', 'venue__name')
     autocomplete_fields = ['course', 'lecturer', 'venue', 'semester']
     ordering = ('day', 'start_time')
-    autocomplete_fields = ['course','lecturer','venue']
 
 
 # ============================================

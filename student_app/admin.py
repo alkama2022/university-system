@@ -6,7 +6,7 @@ from .models import Student,Registration,Session,Course,Complaint
 # ================================
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    
+    autocomplete_fields = ['user']
     # Fields to display in admin list
     list_display = (
         'first_name',
@@ -79,6 +79,8 @@ class StudentAdmin(admin.ModelAdmin):
             'fields': ('date_registered',)
         }),
     )
+
+
 
 # ================================
 # COURSE ADMIN

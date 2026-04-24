@@ -1,45 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Faculty of Computing - Where future innovators are built">
-    <title>{{ selected_faculty.name }} | Faculty of Computing - EduSphere</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Link CSS -->
-    <link rel="stylesheet" href="{% static 'css/faculty_home.css' %}">
-</head>
-<body>
-
-<header class="academic-header">
-    <div class="header-inner">
-        <div class="logo">
-            <div class="logo-icon" aria-label="Graduation cap icon">
-                <i class="fas fa-graduation-cap"></i>
-            </div>
-            <div>
-                <h1>EduSphere</h1>
-                <p>Faculty of Computing</p>
-            </div>
-        </div>
-        
-        <div class="header-actions">
-            <a href="{% url 'student_app:list' %}" class="students-link">
-                <i class="fas fa-users"></i>
-                <span>View Students</span>
-            </a>
-        </div>
-    </div>
-</header>
-
+{% block content %}
 <main>
     <div class="container">
         
@@ -275,6 +236,15 @@
     </div>
 </main>
 
+
+ 
+        
+{% endblock content %}
+
+{% block footer %}
+    
+
+    
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-section">
@@ -304,7 +274,4 @@
         <p class="footer-version">Version 2.0 | Academic Management System</p>
     </div>
 </footer>
-
-<script src="{% static 'js/scripts.js' %}" defer></script>
-</body>
-</html>
+{% endblock%}
