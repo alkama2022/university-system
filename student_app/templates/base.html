@@ -15,6 +15,7 @@
      <link rel="stylesheet" href="{% static 'css/student_lists.css' %}">
      <link rel="stylesheet" href="{% static 'css/base.css' %}">
      <link rel="stylesheet" href="{% static 'css/faculty_home.css' %}">
+     <link rel="stylesheet" href="{% static 'css/dashbord.css' %}">
      
     <style>
 
@@ -67,7 +68,7 @@
                 <!-- User Info with Avatar -->
                 <div class="user-info">
                     <div class="user-avatar">
-                        {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1"|default:"U" }}
+                        {{ user.first_name|slice:":1" }}{{ user.username|slice:":1"|capfirst|default:"U" }}
                     </div>
                     <span class="user-name">{{ user.username }}</span>
                 </div>

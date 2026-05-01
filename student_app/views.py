@@ -34,7 +34,7 @@ def create_complaint(request):
 
 @login_required
 def student_propile(request):
-    student = Student.objects.get(user = request.user)
+    student = Student.objects.select_related('department','user','level','session').get(user = request.user)
     context = {'student':student}
     return render(request,'profile.html',context)
 
@@ -143,7 +143,7 @@ def enrollment_view(request):
     
 @login_required  
 def show_student(request):
-    students = Student.objects.all()
+    students = Student.objects.select_related('level').all()
     paginator = Paginator(students, 6)  # 10 students per page
 
     page_number = request.GET.get('page')
@@ -213,9 +213,7 @@ def logout_view(request):
     
     
 @login_required
-def dashboard(request):
-    student = request.user.student
-
-    return render(request, 'dashboard.html', {
-        'student': student
-    })
+def dashboard(request): #request.user.student
+    student = Student.objects.select_related('department','level','user','session').get(user=request.user)
+    
+    return render(request, 'dashboard.html', {'student': student})

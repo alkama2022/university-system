@@ -1,0 +1,493 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<style>
+    /* ========== RESULTS PAGE SPECIFIC STYLES ========== */
+    
+    /* Container */
+    .results-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+    
+    /* Student Profile Card */
+    .student-profile-card {
+        background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-soft) 100%);
+        border-radius: 24px;
+        padding: 1.8rem;
+        margin-bottom: 2rem;
+        color: white;
+        animation: slideIn 0.5s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .student-profile-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: rgba(46, 154, 110, 0.1);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+    
+    .student-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .student-name i {
+        color: var(--green-fresh);
+        font-size: 2rem;
+    }
+    
+    .student-details {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+    
+    .detail-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.9rem;
+    }
+    
+    /* Overall GPA Card */
+    .gpa-overview {
+        background: linear-gradient(135deg, var(--green-fresh) 0%, var(--teal-mid) 100%);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: white;
+        animation: fadeInUp 0.5s ease 0.05s backwards;
+    }
+    
+    .gpa-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+    }
+    
+    .gpa-value {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1;
+    }
+    
+    .gpa-value small {
+        font-size: 1rem;
+        font-weight: 400;
+        opacity: 0.8;
+    }
+    
+    /* Semester Cards */
+    .semester-card {
+        background: var(--white-card);
+        border-radius: 24px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        animation: fadeInUp 0.5s ease backwards;
+    }
+    
+    .semester-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    .semester-card:first-of-type {
+        animation-delay: 0.1s;
+    }
+    
+    .semester-card:last-of-type {
+        animation-delay: 0.15s;
+    }
+    
+    .semester-header {
+        padding: 1.2rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .semester-header h4 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .semester-gpa {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.4rem 1rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    /* Table Styles */
+    .results-table-wrapper {
+        overflow-x: auto;
+        padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+    
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    
+    .results-table th {
+        background: var(--green-light);
+        color: var(--blue-deep);
+        padding: 1rem;
+        text-align: left;
+        font-weight: 700;
+        border-bottom: 2px solid var(--green-fresh);
+    }
+    
+    .results-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #eef2f6;
+        color: #2c3f4f;
+    }
+    
+    .results-table tr:hover {
+        background: var(--green-light);
+        transition: var(--transition);
+    }
+    
+    /* Grade Badges */
+    .grade-badge {
+        display: inline-block;
+        padding: 0.3rem 1rem;
+        border-radius: 40px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-align: center;
+        min-width: 60px;
+    }
+    
+    .grade-A { background: #d1fae5; color: #065f46; }
+    .grade-B { background: #dbeafe; color: #1e40af; }
+    .grade-C { background: #fed7aa; color: #9a3412; }
+    .grade-D { background: #fef3c7; color: #92400e; }
+    .grade-F { background: #fee2e2; color: #991b1b; }
+    
+    /* Score Circle */
+    .score-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+    
+    .score-excellent { background: #d1fae5; color: #065f46; }
+    .score-good { background: #dbeafe; color: #1e40af; }
+    .score-average { background: #fed7aa; color: #9a3412; }
+    .score-poor { background: #fee2e2; color: #991b1b; }
+    
+    /* Course Code */
+    .course-code {
+        font-weight: 600;
+        color: var(--blue-deep);
+        background: rgba(10, 62, 109, 0.08);
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin-right: 8px;
+    }
+    
+    /* Empty State */
+    .empty-results {
+        text-align: center;
+        padding: 3rem;
+        color: #7a8e9e;
+    }
+    
+    .empty-results i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+        color: var(--teal-mid);
+    }
+    
+    /* Animations */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .results-container {
+            padding: 1rem;
+        }
+        
+        .student-name {
+            font-size: 1.4rem;
+            flex-wrap: wrap;
+        }
+        
+        .gpa-value {
+            font-size: 2.5rem;
+        }
+        
+        .semester-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 0.7rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+    
+<div class="results-container">
+    <!-- Student Info Card -->
+    <div class="student-profile-card">
+        <div class="student-name">
+            <i class="fas fa-user-graduate"></i>
+            {{ student.user.get_full_name|default:student.user.username }}
+        </div>
+        <div class="student-details">
+            <span class="detail-badge">
+                <i class="fas fa-building"></i> {{ student.department }}
+            </span>
+            <span class="detail-badge">
+                <i class="fas fa-layer-group"></i> Level {{ student.level }}
+            </span>
+            <span class="detail-badge">
+                <i class="fas fa-id-card"></i> {{ student.registration_number|default:"Not specified" }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Overall GPA Card -->
+    <div class="gpa-overview">
+        <div class="gpa-label">
+            <i class="fas fa-chart-line"></i> Cumulative Academic Performance
+        </div>
+        <div class="gpa-value">
+            {{ avg_gpa|default:"0.00"|floatformat:2 }} <small>/ 5.00</small>
+        </div>
+        <div style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.9;">
+            Overall Grade Point Average (GPA)
+        </div>
+    </div>
+
+    <!-- First Semester Results -->
+    <div class="semester-card">
+        <div class="semester-header" style="background: linear-gradient(135deg, #0A3E6D, #1e5a88); color: white;">
+            <h4>
+                <i class="fas fa-sun"></i>
+                First Semester Results
+            </h4>
+            <div class="semester-gpa">
+                <i class="fas fa-star"></i> Semester GPA: {{ first_semester_gpa|floatformat:2|default:"0.00" }}
+            </div>
+        </div>
+        
+        <div class="results-table-wrapper">
+            {% if first_semester_timetable %}
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-book"></i> Course</th>
+                            <th><i class="fas fa-chart-simple"></i> Unit</th>
+                            <th><i class="fas fa-percent"></i> Score</th>
+                            <th><i class="fas fa-award"></i> Grade</th>
+                            <th><i class="fas fa-calculator"></i> Grade Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in first_semester_timetable %}
+                        <tr>
+                            <td>
+                                <span class="course-code">{{ result.course.code|default:"" }}</span>
+                                {{ result.course.name }}
+                            </td>
+                            <td>{{ result.course.unit }}</td>
+                            <td>
+                                {% with score=result.total_score|default:0 %}
+                                <span class="score-circle 
+                                    {% if score >= 70 %}score-excellent
+                                    {% elif score >= 60 %}score-good
+                                    {% elif score >= 50 %}score-average
+                                    {% else %}score-poor{% endif %}">
+                                    {{ score }}
+                                </span>
+                                {% endwith %}
+                            </td>
+                            <td>
+                                <span class="grade-badge grade-{{ result.grade|default:'F'|slice:':1'|upper }}">
+                                    {{ result.grade|default:"F" }}
+                                </span>
+                            </td>
+                            <td>
+                                <strong>{{ result.grade_point|default:"0.00"|floatformat:2 }}</strong>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-results">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No results available for First Semester</p>
+                    <small>Please check back later or contact your academic advisor</small>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Second Semester Results -->
+    <div class="semester-card">
+        <div class="semester-header" style="background: linear-gradient(135deg, #2C7A6E, #2E9A6E); color: white;">
+            <h4>
+                <i class="fas fa-moon"></i>
+                Second Semester Results
+            </h4>
+            <div class="semester-gpa">
+                <i class="fas fa-star"></i> Semester GPA: {{ second_semester_gpa|floatformat:2|default:"0.00" }}
+            </div>
+        </div>
+        
+        <div class="results-table-wrapper">
+            {% if second_semester_timetable %}
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-book"></i> Course</th>
+                            <th><i class="fas fa-chart-simple"></i> Unit</th>
+                            <th><i class="fas fa-percent"></i> Score</th>
+                            <th><i class="fas fa-award"></i> Grade</th>
+                            <th><i class="fas fa-calculator"></i> Grade Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in second_semester_timetable %}
+                        <tr>
+                            <td>
+                                <span class="course-code">{{ result.course.code|default:"" }}</span>
+                                {{ result.course.name }}
+                            </td>
+                            <td>{{ result.course.unit }}</td>
+                            <td>
+                                {% with score=result.total_score|default:0 %}
+                                <span class="score-circle 
+                                    {% if score >= 70 %}score-excellent
+                                    {% elif score >= 60 %}score-good
+                                    {% elif score >= 50 %}score-average
+                                    {% else %}score-poor{% endif %}">
+                                    {{ score }}
+                                </span>
+                                {% endwith %}
+                            </td>
+                            <td>
+                                <span class="grade-badge grade-{{ result.grade|default:'F'|slice:':1'|upper }}">
+                                    {{ result.grade|default:"F" }}
+                                </span>
+                            </td>
+                            <td>
+                                <strong>{{ result.grade_point|default:"0.00"|floatformat:2 }}</strong>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-results">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No results available for Second Semester</p>
+                    <small>Please check back later or contact your academic advisor</small>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Academic Performance Summary (Optional) -->
+    {% if first_semester_timetable or second_semester_timetable %}
+    <div class="semester-card" style="background: linear-gradient(135deg, #f8fafc, #ffffff);">
+        <div class="semester-header" style="background: #e8f5ed; color: var(--blue-deep);">
+            <h4>
+                <i class="fas fa-chart-pie"></i>
+                Performance Summary
+            </h4>
+        </div>
+        <div class="results-table-wrapper">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; padding: 1rem 0;">
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--green-fresh);">
+                        {{ first_semester_timetable|length|default:0 }}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #6b7c8f;">First Semester Courses</div>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--green-fresh);">
+                        {{ second_semester_timetable|length|default:0 }}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #6b7c8f;">Second Semester Courses</div>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--teal-mid);">
+                        {{ first_semester_timetable|length|add:second_semester_timetable|length|default:0 }}
+                    </div>
+                    <div style="font-size: 0.8rem; color: #6b7c8f;">Total Courses Taken</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

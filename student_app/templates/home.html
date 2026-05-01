@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content %}
+{% load static %}
 <main>
     <div class="container">
         
@@ -57,7 +57,7 @@
                     <i class="fas fa-info-circle"></i>
                 </div>
                 <h3>About the Faculty</h3>
-                <p>{{ faculty.description|default:"Leading the way in technological innovation and academic excellence." }}</p>
+                <p>Leading the way in technological innovation and academic excellence.</p>
             </div>
             
             <div class="info-card">
@@ -197,7 +197,7 @@
                                 {{ department.description|default:"Excellence in technology education and innovation"|truncatewords:15 }}
                             </p>
                             
-                            <a href ="{% url 'student_app:depertment' department.id%}" href="#" class="department-link">
+                            <a href ="{% url 'student_app:depertment' department.id%}" class="department-link">
                                 Learn More <i class="fas fa-arrow-right"></i>
                             </a>
                     

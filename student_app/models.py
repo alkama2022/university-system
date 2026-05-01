@@ -109,7 +109,7 @@ class Student(models.Model):
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     # image = models.ImageField(upload_to='students/', null=True, blank=True)
 
-    level = models.ForeignKey('management_app.Level',on_delete=models.CASCADE)
+    level = models.ForeignKey('management_app.Level',on_delete=models.CASCADE,related_name='lavels')
     faculty = models.CharField(max_length=200)
     department = models.ForeignKey('management_app.Department',on_delete=models.CASCADE,related_name='students') 
     session = models.ForeignKey(Session,
