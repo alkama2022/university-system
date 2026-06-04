@@ -49,8 +49,7 @@ def show_timetable_view(request):
 
     return render(request, 'management_apps/timetable.html', context)
 
-from django.db.models import Avg
-from pprint import pprint
+
 
 def show_results(request):
     student = request.user.student
@@ -89,3 +88,6 @@ def show_results(request):
     }
 
     return render(request, 'management_apps/result.html', context)
+
+
+

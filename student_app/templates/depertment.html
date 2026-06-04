@@ -1,4 +1,7 @@
-{% load static %}
+
+
+
+ {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,11 +75,11 @@
                     <div class="department-stats">
                         <div class="stat">
                             <i class="fas fa-users"></i>
-                            <span>{{ lecturers|length }} Academic Staff</span>
+                            <span>{{ department.lecturers.all|length }} Academic Staff</span>
                         </div>
                         <div class="stat">
                             <i class="fas fa-book"></i>
-                            <span>{{ courses|length }} Courses</span>
+                            <span>{{ department.courses.all|length }} Courses</span>
                         </div>
                     </div>
                 </div>
@@ -113,7 +116,7 @@
             </div>
             
             <div class="staff-grid">
-                {% for lecturer in lecturers %}
+                {% for lecturer in department.lecturers.all %}
                     <div class="staff-card">
                         <div class="staff-image">
                             {% if lecturer.image %}
@@ -152,7 +155,7 @@
                 <p>Comprehensive curriculum designed for excellence</p>
             </div>
 
-            {% regroup courses by level as course_levels %}
+            {% regroup department.courses.all by level as course_levels %}
             
             {% for level_group in course_levels %}
             <div class="course-level">

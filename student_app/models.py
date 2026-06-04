@@ -301,17 +301,17 @@ class Complaint(models.Model):
     
     student = models.ForeignKey(Student,
         on_delete=models.CASCADE,
-        related_name='complaints'
+        related_name='students'
     )
     course = models.ForeignKey(Course,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='complaints'
+        related_name='courses'
     )
     complaint_type = models.CharField(max_length=20, choices=COMPLAINT_TYPES)
     subject = models.CharField(max_length=200)
-    session = models.ForeignKey(Session,on_delete=models.SET_NULL,null=True,blank=True,related_name='complaints')
+    session = models.ForeignKey(Session,on_delete=models.SET_NULL,null=True,blank=True,related_name='sessions')
     description = models.TextField()
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
     # Timestamps

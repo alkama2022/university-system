@@ -1,22 +1,26 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from .forms import ComplaintForm
-from .models import Registration,Student,Course,Session
+from .models import Registration,Student,Course,Session,Complaint
 from django.contrib import messages
 from django.db.models import Prefetch
 from django.core.paginator import Paginator
 from management_app.models import Faculty,Department,Lecturer
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from pprint import pprint
 
+@login_required
 def complaint_list(request):
-    student = request.user.student
-    complaints = student.complaints.select_related('course').all()
+    # student = request.user.student
+    complaints = Complaint.objects.select_related('student','course','session').all()
+    pprint(complaints)
     context = {'complaints': complaints}
     return render(request, 'complaint_list.html', context)
+
 @login_required
 def create_complaint(request):
     student = request.user.student
-
     if request.method == 'POST':
         form = ComplaintForm(request.POST, student=student)
         if form.is_valid():
@@ -34,40 +38,49 @@ def create_complaint(request):
 
 @login_required
 def student_propile(request):
-    student = Student.objects.select_related('department','user','level','session').get(user = request.user)
+    try:
+       student = Student.objects.select_related('department','user','level','session').get(user = request.user)
+       
+    except Student.DoesNotExist:
+        messages.error(request,"You Are Not Authorize Student To Enter This Site")
+        return redirect('student_app:home')
     context = {'student':student}
     return render(request,'profile.html',context)
 
+
+
 @login_required
-def show_depertment(request,dept_id):
-    """Display department details with staff and courses"""
+def show_depertment(request, dept_id):
+    """Optimized: no duplicate queries"""
+    
     department = get_object_or_404(
-        Department.objects.prefetch_related('lecturers', 'courses'),
+        Department.objects.prefetch_related(
+            Prefetch(
+                'lecturers',
+                queryset=Lecturer.objects.filter(is_active=True)
+                .order_by('roll', 'name')
+            ),
+            Prefetch(
+                'courses',
+                queryset=Course.objects.filter(is_active=True)
+                .order_by('level', 'code')
+                .select_related('depertiment','level')
+            )
+        ),
         pk=dept_id
     )
 
-    # Get all courses for this department, ordered by level
-    lecturers = Lecturer.objects.filter(
-        department=department,
-        is_active=True
-    ).order_by('roll', 'name')
-    
-    courses = Course.objects.filter(
-        depertiment=department,
-        is_active=True
-    ).select_related('depertiment').order_by('level', 'code')
-
     context = {
         'department': department,
-        'lecturers': lecturers,
-        'courses': courses,
-    }
-    return render(request,'depertment.html',context)
 
+    }
+
+    return render(request, 'depertment.html', context)
 
 @login_required
 def home(request):
     selected_faculty = Faculty.objects.prefetch_related('departments').first()
+    pprint(selected_faculty)
     return render(request,'home.html',{'selected_faculty':selected_faculty})
 
 
@@ -154,27 +167,17 @@ def show_student(request):
     }
     return render(request,'student_lists.html',context)
 
-@login_required
-def student_details(request, pk):
-    student_details = Student.objects.prefetch_related(
-        Prefetch(
-            'enrollments',
-            queryset=Registration.objects.select_related('course')  # fetch course in the same query
-        )
-    ).get(id=pk)
-    context = {'student_details': student_details}
-    return render(request, 'student_details.html', context)
-
-
 
 
 @login_required
 def student_details(request, pk):
     """Function-based view with pagination"""
-    student = get_object_or_404(
-        Student.objects.prefetch_related('enrollments__course'),
-        pk=pk
-    )
+    try :
+       student = Student.objects.prefetch_related('enrollments__course').filter(pk=pk).get(user=request.user)
+    except Student.DoesNotExist:
+        messages.error(request,"You Are Not Authorize Student To Enter This Site")
+        return redirect('student_app:list')
+    
     
     # Get all enrollments
     # enrollments = student.enrollments.select_related('course').all()
@@ -214,6 +217,11 @@ def logout_view(request):
     
 @login_required
 def dashboard(request): #request.user.student
-    student = Student.objects.select_related('department','level','user','session').get(user=request.user)
+    try:
+       student = Student.objects.select_related('department','level','user','session').get(user=request.user)
+    except Student.DoesNotExist:
+        messages.error(request,"You Are Not Authorize Student To Enter This Site")
+        return redirect('student_app:home')
     
+        
     return render(request, 'dashboard.html', {'student': student})
