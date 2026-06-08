@@ -6,7 +6,7 @@ from .models import Student,Registration,Session,Course,Complaint
 # ================================
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['user']
+    # autocomplete_fields = ['user_name']
     # Fields to display in admin list
     list_display = (
         'first_name',
@@ -34,7 +34,7 @@ class StudentAdmin(admin.ModelAdmin):
     # Search functionality
     search_fields = (
         'registration_number',
-        'user'
+        'user_name'
     )
 
     # Default ordering
@@ -62,7 +62,7 @@ class StudentAdmin(admin.ModelAdmin):
             'gender',
             'blood_group',
             'image',
-            'user'
+            'user_name'
                 
             )
         }),

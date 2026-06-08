@@ -68,7 +68,7 @@ class SemesterAdmin(admin.ModelAdmin):
 # ============================================
 @admin.register(Lecturer)
 class LecturerAdmin(admin.ModelAdmin):
-    list_display = ('staff_id', 'name', 'email', 'user','department', 'is_active')
+    list_display = ('staff_id', 'name', 'email', 'user_name','department', 'is_active')
     list_filter = ('department', 'is_active', 'title')
     search_fields = ('staff_id', 'name', 'email')
     autocomplete_fields = ['department']

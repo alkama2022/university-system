@@ -104,7 +104,7 @@ class Student(models.Model):
     second_name = models.CharField(max_length=200,blank=True)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(max_length=150)
-    user = models.OneToOneField(User,on_delete=models.CASCADE,null = True,blank = True)
+    user_name = models.CharField(max_length=150, unique=True)
     registration_number = models.CharField(max_length=50, unique=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     # image = models.ImageField(upload_to='students/', null=True, blank=True)

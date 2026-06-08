@@ -119,7 +119,7 @@ class Lecturer(models.Model):
     staff_id = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=10, choices=TITLE_CHOICES)
     name = models.CharField(max_length=100)
-    user = models.OneToOneField(User,on_delete=models.CASCADE,null = True,blank = True)
+    user_name = models.CharField(max_length=150, unique=True)  # ✅ Added user_name field
     image = models.ImageField(upload_to='lecturers/', blank=True, null=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15, blank=True)
